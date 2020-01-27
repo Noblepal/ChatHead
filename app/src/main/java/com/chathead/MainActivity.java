@@ -1,6 +1,7 @@
 package com.chathead;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -12,10 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
 
-import com.chathead.fragments.Home;
-import com.google.android.material.tabs.TabLayout;
 import com.nex3z.notificationbadge.NotificationBadge;
 import com.txusballesteros.bubbles.BubbleLayout;
 import com.txusballesteros.bubbles.BubblesManager;
@@ -26,13 +24,14 @@ public class MainActivity extends AppCompatActivity {
     private BubblesManager bubblesManager;
     private NotificationBadge mBadge;
 
+    Context actvity;
     private int MY_PERMISSION = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        actvity = this;
         Button btnAdd = (Button) findViewById(R.id.btnAddBubble);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,12 +52,20 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            initBubble();
+            Intent i = new Intent(Intent.ACTION_MAIN);
+            i.addCategory(Intent.CATEGORY_HOME);
+            startActivity(i);
+        }
+
         initBubble();
 
 
     }
 
-    private void initBubble() {
+    public void initBubble() {
         bubblesManager = new BubblesManager.Builder(this)
                 .setTrashLayout(R.layout.bubble_remove)
                 .setInitializationCallback(new OnInitializedCallback() {
@@ -87,26 +94,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onBubbleClick(BubbleLayout bubble) {
                 //Show Hide content layout
-                toggleContentVisibility(bubbleView.findViewById(R.id.layout_content));
-                Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();
+                Intent startChatActivity = new Intent(getApplicationContext(), ChatHeadActivity.class);
+                startChatActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startChatActivity);
+                bubblesManager.recycle();
+                /*toggleContentVisibility(bubbleView.findViewById(R.id.layout_content));
+                Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();*/
             }
         });
 
-        // Find the view pager that will allow the user to swipe between fragments
-        ViewPager viewPager = bubbleView.findViewById(R.id.myviewpager);
-
-        // Create an adapter that knows which fragment should be shown on each page
-        MyFragmentPagerAdapter adapter = new MyFragmentPagerAdapter(getApplicationContext(), getSupportFragmentManager());
-
-        // Set the adapter onto the view pager
-        viewPager.setAdapter(adapter);
-
-        // Give the TabLayout the ViewPager
-        TabLayout tabLayout =  bubbleView.findViewById(R.id.mytablayout);
-        tabLayout.setupWithViewPager(viewPager);
 
         bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 60, 20);
+        bubblesManager.addBubble(bubbleView, 100, 20);
     }
 
     private void toggleContentVisibility(View v) {
