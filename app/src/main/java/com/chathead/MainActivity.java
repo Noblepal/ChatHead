@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     private BubblesManager bubblesManager;
     private NotificationBadge mBadge;
-
+    private static final String TAG = "MainActivity";
     Context actvity;
     private int MY_PERMISSION = 1000;
 
@@ -31,14 +32,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        actvity = this;
-        Button btnAdd = (Button) findViewById(R.id.btnAddBubble);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addNewBubble();
-            }
-        });
 
         //Check permission
         if (Build.VERSION.SDK_INT >= 23) {
@@ -52,16 +45,26 @@ public class MainActivity extends AppCompatActivity {
             startService(intent);
         }
 
+        initBubble();
+
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            initBubble();
+            Log.d(TAG, "onCreate: " + extras.getString("show"));
+            addNewBubble();
             Intent i = new Intent(Intent.ACTION_MAIN);
             i.addCategory(Intent.CATEGORY_HOME);
             startActivity(i);
+
         }
 
-        initBubble();
-
+        actvity = this;
+        Button btnAdd = (Button) findViewById(R.id.btnAddBubble);
+        btnAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addNewBubble();
+            }
+        });
 
     }
 
@@ -97,23 +100,12 @@ public class MainActivity extends AppCompatActivity {
                 Intent startChatActivity = new Intent(getApplicationContext(), ChatHeadActivity.class);
                 startChatActivity.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(startChatActivity);
-                bubblesManager.recycle();
-                /*toggleContentVisibility(bubbleView.findViewById(R.id.layout_content));
-                Toast.makeText(MainActivity.this, "Clicked", Toast.LENGTH_SHORT).show();*/
+                finish();
             }
         });
 
-
         bubbleView.setShouldStickToWall(true);
-        bubblesManager.addBubble(bubbleView, 100, 20);
-    }
-
-    private void toggleContentVisibility(View v) {
-        if (v.getVisibility() == View.VISIBLE) {
-            v.setVisibility(View.GONE);
-        } else {
-            v.setVisibility(View.VISIBLE);
-        }
+        bubblesManager.addBubble(bubbleView, 60, 20);
     }
 
     @Override

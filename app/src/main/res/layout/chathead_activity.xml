@@ -1,34 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.txusballesteros.bubbles.BubbleLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="8dp"
-    android:clipChildren="false"
-    android:clipToPadding="false">
+    android:orientation="vertical">
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/avatar2"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:elevation="1dp"
-        android:src="@drawable/avatar"
-        app:civ_border_color="#FFF"
-        app:civ_border_width="2dp" />
+    <com.txusballesteros.bubbles.BubbleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipChildren="true"
+        android:clipToPadding="true">
 
-    <com.nex3z.notificationbadge.NotificationBadge
-        android:id="@+id/count2"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
-        android:elevation="2dp"
-        app:nbBackground="@drawable/bg_with_shadow"
-        app:nbMaxTextLength="2" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/avatar2"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:elevation="1dp"
+            android:src="@drawable/avatar"
+            app:civ_border_color="#FFF"
+            app:civ_border_width="2dp" />
+
+        <com.nex3z.notificationbadge.NotificationBadge
+            android:id="@+id/count2"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:elevation="2dp"
+            app:nbBackground="@drawable/bg_with_shadow"
+            app:nbMaxTextLength="2" />
+
+
+    </com.txusballesteros.bubbles.BubbleLayout>
 
     <LinearLayout
         android:id="@+id/layout2_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="80dp"
         android:background="@color/translucent"
         android:orientation="vertical">
 
@@ -46,4 +53,4 @@
             android:layout_height="match_parent" />
     </LinearLayout>
 
-</com.txusballesteros.bubbles.BubbleLayout>
+</LinearLayout>

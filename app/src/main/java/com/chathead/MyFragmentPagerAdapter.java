@@ -34,7 +34,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
     // This determines the number of tabs
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     // This determines the title for each tab
@@ -48,7 +48,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getString(R.string.utilities);
             case 2:
                 return mContext.getString(R.string.settings);
-
             default:
                 return null;
         }
